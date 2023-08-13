@@ -1,7 +1,8 @@
 'use client';
 
-import { Flex, Box, Button } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import PhotoViewer from '~/lib/components/PhotoViewer';
+import UploadFile from '~/lib/components/UploadFile';
 
 const Home = () => {
   return (
@@ -15,7 +16,7 @@ const Home = () => {
     >
       <PhotoViewer />
       <Box pos="sticky" bottom="5">
-        <Button colorScheme="green">Upload Photo</Button>
+        <UploadFile />
       </Box>
     </Flex>
   );
