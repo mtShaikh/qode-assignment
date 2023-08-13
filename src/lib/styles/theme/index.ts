@@ -10,6 +10,13 @@ const customTheme = extendTheme({
   colors,
   config,
   components,
+  styles: {
+    global: {
+      body: {
+        position: 'unset',
+      },
+    },
+  },
 });
 
 export default customTheme;
