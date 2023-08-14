@@ -18,8 +18,17 @@ const UploadFile = () => {
   };
 
   const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
     event.preventDefault();
+    const file = event.target.files?.[0];
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (!allowedTypes.includes(file?.type as string)) {
+      toast({
+        position: 'top-right',
+        title: 'Only JPEG, PNG, and GIF images are allowed.',
+        status: 'error',
+      });
+      return;
+    }
     const formData = new FormData();
     formData.append('file', file as Blob);
     formData.append('upload_preset', 'v2ewuevm');
