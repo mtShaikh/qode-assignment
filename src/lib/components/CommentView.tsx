@@ -1,20 +1,22 @@
 import { ChatIcon } from '@chakra-ui/icons';
 import {
-  Flex,
-  VStack,
-  StackDivider,
-  InputGroup,
-  Input,
-  InputRightElement,
-  IconButton,
   Box,
-  Text,
-  useToast,
+  Flex,
+  IconButton,
+  Input,
+  InputGroup,
+  InputRightElement,
   Spinner,
+  StackDivider,
+  Text,
+  VStack,
+  useToast,
 } from '@chakra-ui/react';
 import axios from 'axios';
-import { ChangeEvent, useEffect, useState } from 'react';
-import { Comment } from '~/lib/types';
+import type { ChangeEvent } from 'react';
+import { useEffect, useState } from 'react';
+
+import type { Comment } from '~/lib/types';
 
 interface Props {
   photoId: string;
@@ -36,16 +38,13 @@ const CommentView = ({ photoId, username, comments }: Props) => {
       const resp = await axios.post('/api/comments', { photoId, message });
       const newComment = resp.data;
       setCommentList((prev) => [...prev, newComment]);
-
-      // @ts-ignore
-    } catch (err: AxiosError) {
+      setMessage('');
+    } catch {
       toast({
         position: 'top-right',
         title: 'Something went wrong',
         status: 'error',
       });
-
-      console.error(err.message);
     } finally {
       setIsLoading(false);
     }
@@ -72,8 +71,8 @@ const CommentView = ({ photoId, username, comments }: Props) => {
         overflowY="auto"
         spacing={4}
       >
-        {commentList.map((comment, i) => (
-          <Box key={`${comment.id}-${i}`} w="full" display="flex">
+        {commentList.map((comment) => (
+          <Box key={`${comment.id}`} w="full" display="flex">
             <Text fontSize={14} fontWeight="semibold">
               @{comment.user.username}:&nbsp;
             </Text>
@@ -83,7 +82,7 @@ const CommentView = ({ photoId, username, comments }: Props) => {
           </Box>
         ))}
       </VStack>
-      <Box display={'flex'} gap={2} flexDirection={'column'} alignSelf="end">
+      <Box display="flex" gap={2} flexDirection="column" alignSelf="end">
         <Text fontSize={14}>Posted By: @{username}</Text>
         <InputGroup size="md">
           <Input
@@ -92,6 +91,7 @@ const CommentView = ({ photoId, username, comments }: Props) => {
             paddingInlineStart="0.5rem"
             fontSize="12px"
             placeholder="Add your comment"
+            value={message}
           />
           <InputRightElement width="2.5rem">
             <IconButton
@@ -106,7 +106,7 @@ const CommentView = ({ photoId, username, comments }: Props) => {
               left="1px"
               h="2.75rem"
               w="2.75rem"
-            ></IconButton>
+            />
           </InputRightElement>
         </InputGroup>
       </Box>

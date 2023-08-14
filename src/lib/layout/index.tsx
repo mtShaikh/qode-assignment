@@ -1,9 +1,9 @@
 'use client';
 
 import { Box } from '@chakra-ui/react';
+import dynamic from 'next/dynamic';
 import type { ReactNode } from 'react';
 
-import dynamic from 'next/dynamic';
 const Header = dynamic(() => import('./Header'), { ssr: false });
 
 type LayoutProps = {

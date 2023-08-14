@@ -1,6 +1,8 @@
 import { Button, Input, Spinner, useToast } from '@chakra-ui/react';
-import { ChangeEvent, useRef, useState } from 'react';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
+import type { ChangeEvent } from 'react';
+import { useRef, useState } from 'react';
+
 import { useAppContext } from '../context';
 
 const UploadFile = () => {
@@ -41,11 +43,7 @@ const UploadFile = () => {
       });
 
       setRefreshPhoto?.(true);
-
-      //@ts-ignore
-    } catch (error: AxiosError) {
-      console.error(error.message);
-
+    } catch {
       toast({
         position: 'top-right',
         title: 'Something went wrong',

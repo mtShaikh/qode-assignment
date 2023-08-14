@@ -1,21 +1,15 @@
 'use client';
 
-import {
-  Box,
-  Flex,
-  useDisclosure,
-  useToast,
-  Text,
-  Button,
-} from '@chakra-ui/react';
-import axios, { AxiosError } from 'axios';
+import { Box, Button, Flex, useDisclosure, useToast } from '@chakra-ui/react';
+import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
+
 import NameInputModal from '~/lib/components/NameInputModal';
 import PhotoViewer from '~/lib/components/PhotoViewer';
 import UploadFile from '~/lib/components/UploadFile';
 import { useAppContext } from '~/lib/context';
-import { Photo } from '~/lib/types';
+import type { Photo } from '~/lib/types';
 
 const Home = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -29,15 +23,12 @@ const Home = () => {
       const resp = await axios.get('/api/photos');
       setPhotos(resp.data);
       setRefreshPhoto?.(false);
-      // @ts-ignore
-    } catch (err: AxiosError) {
+    } catch {
       toast({
         position: 'top-right',
         title: 'Something went wrong',
         status: 'error',
       });
-
-      console.error(err.message);
     }
   };
 
@@ -46,16 +37,12 @@ const Home = () => {
       const resp = await axios.get('/api/users/me');
 
       setUsername?.(resp.data.username);
-
-      // @ts-ignore
-    } catch (err: AxiosError) {
+    } catch {
       toast({
         position: 'top-right',
         title: 'Something went wrong',
         status: 'error',
       });
-
-      console.error(err.message);
     }
   };
 
@@ -70,6 +57,7 @@ const Home = () => {
     } else {
       onOpen();
     }
+    /* eslint-disable react-hooks/exhaustive-deps */
   }, []);
 
   return (
@@ -91,15 +79,15 @@ const Home = () => {
             </Button>
           </Box>
         )}
-        {photos.map((photo, i) => (
-          <PhotoViewer {...photo} key={`${photo.id}-${i}`} />
+        {photos.map((photo) => (
+          <PhotoViewer {...photo} key={`${photo.id}`} />
         ))}
 
         <Box pos="sticky" bottom="5">
           <UploadFile />
         </Box>
       </Flex>
-      <NameInputModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <NameInputModal isOpen={isOpen} onClose={onClose} />
     </>
   );
 };

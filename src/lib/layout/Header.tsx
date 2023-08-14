@@ -1,11 +1,12 @@
 'use client';
 
 import { Box, Flex, Link, Text, useDisclosure } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+
+import NameInputModal from '../components/NameInputModal';
+import { useAppContext } from '../context';
 
 import ThemeToggle from './ThemeToggle';
-import NameInputModal from '../components/NameInputModal';
-import { useEffect, useState } from 'react';
-import { useAppContext } from '../context';
 
 const Header = () => {
   const [username, setUsername] = useState<string>();
@@ -30,20 +31,16 @@ const Header = () => {
           justifyContent="center"
           gap={4}
         >
+          {/* eslint-disable jsx-a11y/anchor-is-valid */}
           <Link fontSize={20} fontWeight="semibold" onClick={onOpen}>
-            @{username}
+            {username ? `@${username}` : 'Login'}
           </Link>
           <Box>
             <ThemeToggle />
           </Box>
         </Box>
       </Flex>
-      <NameInputModal
-        closeOnOverlayClick={true}
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={onClose}
-      />
+      <NameInputModal closeOnOverlayClick isOpen={isOpen} onClose={onClose} />
     </>
   );
 };

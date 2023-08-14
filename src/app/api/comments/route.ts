@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 /* POST /api/comments
 request: {
@@ -17,8 +18,8 @@ response: {
 */
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  let message = body.message;
-  let photo = body.photoId;
+  const { message } = body;
+  const photo = body.photoId;
   if (!photo) {
     return NextResponse.json({}, { status: 400, statusText: 'Invalid url' });
   }

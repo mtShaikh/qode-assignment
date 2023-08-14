@@ -1,4 +1,5 @@
-import { PropsWithChildren, createContext, useContext, useState } from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 
 interface ContextInterface {
   username?: string;
@@ -14,13 +15,12 @@ export const AppProvider = ({ children }: PropsWithChildren) => {
 
   /* using state var to keep track of new photos added */
   const [refreshPhoto, setRefreshPhoto] = useState<boolean>(false);
-  return (
-    <AppContext.Provider
-      value={{ username, setUsername, refreshPhoto, setRefreshPhoto }}
-    >
-      {children}
-    </AppContext.Provider>
+
+  const value = useMemo(
+    () => ({ username, setUsername, refreshPhoto, setRefreshPhoto }),
+    [username, setUsername, refreshPhoto, setRefreshPhoto]
   );
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
 export const useAppContext = (): ContextInterface => {

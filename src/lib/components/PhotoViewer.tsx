@@ -1,6 +1,8 @@
-import { Box, Flex, Image, Text } from '@chakra-ui/react';
+import { Box, Flex, Image } from '@chakra-ui/react';
+
+import type { Photo } from '../types';
+
 import CommentView from './CommentView';
-import { Photo } from '../types';
 
 const PhotoViewer = ({ url, comments, id, user }: Photo) => {
   return (

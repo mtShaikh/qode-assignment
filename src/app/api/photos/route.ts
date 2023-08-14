@@ -1,7 +1,8 @@
-import { Photo } from '@prisma/client';
+import type { Photo } from '@prisma/client';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { type NextRequest } from 'next/server';
+
 import prisma from '~/lib/prisma';
 
 /* POST /api/photos
@@ -19,7 +20,7 @@ response: {
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  let url = body.url;
+  const { url } = body;
   if (!url) {
     return NextResponse.json({}, { status: 400, statusText: 'Invalid url' });
   }
