@@ -17,7 +17,7 @@ const CommentView = () => {
       direction="column"
       justify="space-between"
       overflowX="unset"
-      w={{ base: 'full', md: '40%' }}
+      w={{ base: 'full', md: '36%' }}
       h="500px"
     >
       <VStack
@@ -39,7 +39,7 @@ const CommentView = () => {
           <Input
             pr="2.5rem"
             paddingInlineStart="0.5rem"
-            // type={show ? 'text' : 'password'}
+            fontSize="12px"
             placeholder="Add your comment"
           />
           <InputRightElement width="2.5rem">

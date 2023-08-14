@@ -3,12 +3,19 @@
 import { Box, Flex, Link, Text, useDisclosure } from '@chakra-ui/react';
 
 import ThemeToggle from './ThemeToggle';
-import { useLocalStorage } from '~/app/hooks/useLocalStorage';
 import NameInputModal from '../components/NameInputModal';
+import { useEffect, useState } from 'react';
+import { useUserContext } from '../context';
 
 const Header = () => {
+  const [username, setUsername] = useState<string>();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { storedValue: username } = useLocalStorage<string>('username', '');
+  const { username: storeUsername } = useUserContext();
+
+  /* update username in header on context update */
+  useEffect(() => {
+    setUsername(storeUsername);
+  }, [storeUsername]);
 
   return (
     <>
@@ -31,7 +38,12 @@ const Header = () => {
           </Box>
         </Box>
       </Flex>
-      <NameInputModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <NameInputModal
+        closeOnOverlayClick={true}
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+      />
     </>
   );
 };

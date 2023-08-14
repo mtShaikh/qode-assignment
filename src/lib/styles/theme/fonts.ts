@@ -7,6 +7,6 @@ export const fontBody = FontBody({
 });
 
 export const fonts: DeepPartial<Theme['fonts']> = {
-  heading: fontBody.style.fontFamily,
-  body: fontBody.style.fontFamily,
+  heading: `${fontBody.style.fontFamily}, sans-serif`,
+  body: `${fontBody.style.fontFamily}, sans-serif`,
 };

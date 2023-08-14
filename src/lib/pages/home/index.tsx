@@ -1,22 +1,40 @@
 'use client';
 
 import { Box, Flex, useDisclosure } from '@chakra-ui/react';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 import { useEffect } from 'react';
-import { useLocalStorage } from '~/app/hooks/useLocalStorage';
 import NameInputModal from '~/lib/components/NameInputModal';
 import PhotoViewer from '~/lib/components/PhotoViewer';
 import UploadFile from '~/lib/components/UploadFile';
+import { useUserContext } from '~/lib/context';
 
 const Home = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { storedValue: username } = useLocalStorage<string>('username', '');
+  const { setUsername } = useUserContext();
 
+  const fetchUsername = async () => {
+    try {
+      const resp = await axios.get('/api/users/me');
+
+      setUsername?.(resp.data.username);
+
+      // @ts-ignore
+    } catch (err: AxiosError) {
+      console.error(err.message);
+    }
+  };
+
+  /* set username on page load 
+     if user not set, open username modal
+  */
   useEffect(() => {
-    if (!username) {
+    const userCookie = Cookies.get('user');
+    if (userCookie) {
+      fetchUsername();
+    } else {
       onOpen();
     }
-    // this is a unique identifier for this session
-    const uuid = window.crypto.randomUUID();
   }, []);
 
   return (

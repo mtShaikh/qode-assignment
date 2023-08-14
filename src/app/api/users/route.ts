@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { type NextRequest } from 'next/server';
 import prisma from '~/lib/prisma';
@@ -12,13 +13,22 @@ response: {
 }
 */
 
-export default async function POST(request: NextRequest) {
+export async function POST(request: NextRequest) {
   const body = await request.json();
   let newUsername = body.username;
   if (newUsername) {
-    const result = await prisma.user.findFirst({
-      where: { username: body.username },
-    });
+    const cookieStore = cookies();
+    const userCookie = cookieStore.get('user');
+    let result;
+    if (userCookie) {
+      result = await prisma.user.findFirst({
+        where: { id: userCookie.value },
+      });
+    } else {
+      result = await prisma.user.findFirst({
+        where: { username: newUsername },
+      });
+    }
     if (result) {
       const uniqueString = Date.now().toString(36);
       newUsername += uniqueString;

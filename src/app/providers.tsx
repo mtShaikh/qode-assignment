@@ -3,12 +3,15 @@
 import { CacheProvider } from '@chakra-ui/next-js';
 
 import { Chakra as ChakraProvider } from '~/lib/components/Chakra';
+import { UserProvider } from '~/lib/context';
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
-    <CacheProvider>
-      <ChakraProvider>{children}</ChakraProvider>
-    </CacheProvider>
+    <UserProvider>
+      <CacheProvider>
+        <ChakraProvider>{children}</ChakraProvider>
+      </CacheProvider>
+    </UserProvider>
   );
 };
 

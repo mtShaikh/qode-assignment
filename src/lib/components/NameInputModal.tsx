@@ -10,20 +10,40 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
+import Cookies from 'js-cookie';
+import axios, { AxiosError } from 'axios';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { useLocalStorage } from '~/app/hooks/useLocalStorage';
+import { useUserContext } from '../context';
 
 interface Props {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
+  closeOnOverlayClick?: boolean;
 }
 
-const NameInputModal = ({ onOpen, onClose, isOpen }: Props) => {
+const NameInputModal = ({
+  onClose,
+  isOpen,
+  closeOnOverlayClick = false,
+}: Props) => {
   const [username, setUsername] = useState('');
-  const { storedValue, setValue } = useLocalStorage<string>('username', '');
-  const onSubmit = () => {
-    setValue(username);
+  const { username: storeUsername, setUsername: setStoreUsername } =
+    useUserContext();
+
+  const onSubmit = async () => {
+    try {
+      const resp = await axios.post('/api/users', { username });
+
+      const userId = resp.data.id;
+
+      Cookies.set('user', userId, { expires: 30 });
+      setStoreUsername?.(resp.data.username);
+
+      // @ts-ignore
+    } catch (err: AxiosError) {
+      console.error(err.message);
+    }
     onClose();
   };
 
@@ -32,8 +52,14 @@ const NameInputModal = ({ onOpen, onClose, isOpen }: Props) => {
   };
 
   useEffect(() => {
-    setUsername(storedValue);
+    setUsername(storeUsername as string);
   }, []);
+
+  const onLogout = () => {
+    setStoreUsername?.('');
+    Cookies.remove('user');
+    onClose();
+  };
 
   return (
     <>
@@ -42,7 +68,7 @@ const NameInputModal = ({ onOpen, onClose, isOpen }: Props) => {
         isOpen={isOpen}
         onClose={onClose}
         isCentered
-        closeOnOverlayClick={false}
+        closeOnOverlayClick={closeOnOverlayClick}
       >
         <ModalOverlay bg="blackAlpha.700" />
         <ModalContent>
@@ -53,11 +79,14 @@ const NameInputModal = ({ onOpen, onClose, isOpen }: Props) => {
               placeholder="@foobar"
               value={username}
               onChange={onChange}
-              defaultValue={storedValue}
+              defaultValue={storeUsername}
             />
           </ModalBody>
 
           <ModalFooter>
+            <Button mr={3} onClick={onLogout}>
+              Logout
+            </Button>
             <Button colorScheme="blue" mr={3} onClick={onSubmit}>
               Submit
             </Button>
