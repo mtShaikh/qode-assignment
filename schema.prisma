@@ -1,31 +1,42 @@
 // schema.prisma
 
 generator client {
-  provider = "prisma-client-js"
-  previewFeatures = ["jsonProtocol"]
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+    provider = "postgres"
+    url      = env("DATABASE_URL") // uses connection pooling
 }
 
-model Post {
-  id        String     @default(cuid()) @id
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User?   @relation(fields: [authorId], references: [id])
-  authorId  String?
+model Comment {
+    id        String   @id @default(cuid())
+    message   String
+    user      User     @relation(fields: [userId], references: [id])
+    photo     Photo    @relation(fields: [photoId], references: [id])
+    createdAt DateTime @default(now()) @map(name: "created_at")
+    updatedAt DateTime @updatedAt @map(name: "updated_at")
+    userId    String
+    photoId   String
+}
+
+model Photo {
+    id        String    @id @default(cuid())
+    url       String
+    user      User      @relation(fields: [userId], references: [id])
+    createdAt DateTime  @default(now()) @map(name: "created_at")
+    updatedAt DateTime  @updatedAt @map(name: "updated_at")
+    userId    String
+    comments  Comment[]
 }
 
 model User {
-  id            String       @default(cuid()) @id
-  name          String?
-  email         String?   @unique
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
-  posts         Post[]
-  @@map(name: "users")
+    id        String    @id @default(cuid())
+    username  String
+    createdAt DateTime  @default(now()) @map(name: "created_at")
+    updatedAt DateTime  @updatedAt @map(name: "updated_at")
+    photos    Photo[]
+    comments  Comment[]
+
+    @@map(name: "users")
 }

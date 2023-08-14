@@ -15,6 +15,8 @@ const Home = () => {
     if (!username) {
       onOpen();
     }
+    // this is a unique identifier for this session
+    const uuid = window.crypto.randomUUID();
   }, []);
 
   return (
