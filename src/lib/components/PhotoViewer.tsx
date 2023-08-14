@@ -1,8 +1,8 @@
-import { Box, Flex, Image } from '@chakra-ui/react';
+import { Box, Flex, Image, Text } from '@chakra-ui/react';
 import CommentView from './CommentView';
 import { Photo } from '../types';
 
-const PhotoViewer = ({ url, comments, id }: Photo) => {
+const PhotoViewer = ({ url, comments, id, user }: Photo) => {
   return (
     <Flex
       direction={{ base: 'column', md: 'row' }}
@@ -14,16 +14,12 @@ const PhotoViewer = ({ url, comments, id }: Photo) => {
       borderColor="gray.200"
       w="full"
     >
-      <Box
-        w="100%"
-        display="flex"
-        alignItems="center"
-        justifyItems="center"
-        marginY="auto"
-      >
-        <Image w="full" src={url} alt={`${id}-photo`} />
+      <Box w="100%" marginY="auto" bgColor="gray.600">
+        <Box>
+          <Image w="full" src={url} alt={`${id}-photo`} />
+        </Box>
       </Box>
-      <CommentView photoId={id} comments={comments} />
+      <CommentView username={user.username} photoId={id} comments={comments} />
     </Flex>
   );
 };

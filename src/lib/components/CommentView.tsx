@@ -19,9 +19,10 @@ import { Comment } from '~/lib/types';
 interface Props {
   photoId: string;
   comments: Comment[];
+  username: string;
 }
 
-const CommentView = ({ photoId, comments }: Props) => {
+const CommentView = ({ photoId, username, comments }: Props) => {
   const [message, setMessage] = useState('');
   const [commentList, setCommentList] = useState(comments);
   const [isLoading, setIsLoading] = useState(false);
@@ -73,16 +74,17 @@ const CommentView = ({ photoId, comments }: Props) => {
       >
         {commentList.map((comment, i) => (
           <Box key={`${comment.id}-${i}`} w="full" display="flex">
-            <Text fontSize={20} fontWeight="semibold">
-              {comment.user.username}:&nbsp;
+            <Text fontSize={14} fontWeight="semibold">
+              @{comment.user.username}:&nbsp;
             </Text>
-            <Text fontSize={20} fontWeight="normal">
+            <Text fontSize={14} fontWeight="normal">
               {comment.message}
             </Text>
           </Box>
         ))}
       </VStack>
-      <Box display={'flex'} alignSelf="end">
+      <Box display={'flex'} gap={2} flexDirection={'column'} alignSelf="end">
+        <Text fontSize={14}>Posted By: @{username}</Text>
         <InputGroup size="md">
           <Input
             onChange={onChange}
@@ -107,7 +109,6 @@ const CommentView = ({ photoId, comments }: Props) => {
             ></IconButton>
           </InputRightElement>
         </InputGroup>
-        {/* <Textarea placeholder="Add your comment" />{' '} */}
       </Box>
     </Flex>
   );

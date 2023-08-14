@@ -53,6 +53,7 @@ export async function GET(): Promise<NextResponse<Photo[]>> {
       createdAt: 'desc',
     },
     include: {
+      user: true,
       comments: { include: { user: true } },
     },
   });

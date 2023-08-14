@@ -19,7 +19,7 @@ import { Photo } from '~/lib/types';
 
 const Home = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
-  const { setUsername, refreshPhoto } = useAppContext();
+  const { setUsername, refreshPhoto, setRefreshPhoto } = useAppContext();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
@@ -28,7 +28,7 @@ const Home = () => {
     try {
       const resp = await axios.get('/api/photos');
       setPhotos(resp.data);
-
+      setRefreshPhoto?.(false);
       // @ts-ignore
     } catch (err: AxiosError) {
       toast({
