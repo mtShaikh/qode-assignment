@@ -9,6 +9,7 @@
     "build:turbo": "turbo run build",
     "start": "next start",
     "lint": "next lint",
+    "postinstall": "prisma generate",
     "lint:fix": "eslint src --fix && pnpm format",
     "lint:turbo": "turbo run lint",
     "generate": "prisma generate",
