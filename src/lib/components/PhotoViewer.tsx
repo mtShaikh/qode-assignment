@@ -4,7 +4,7 @@ import type { Photo } from '../types';
 
 import CommentView from './CommentView';
 
-const PhotoViewer = ({ url, comments, id, user }: Photo) => {
+const PhotoViewer = ({ url, comments, id, user, createdAt }: Photo) => {
   return (
     <Flex
       direction={{ base: 'column', md: 'row' }}
@@ -21,7 +21,12 @@ const PhotoViewer = ({ url, comments, id, user }: Photo) => {
           <Image w="full" src={url} alt={`${id}-photo`} />
         </Box>
       </Box>
-      <CommentView username={user.username} photoId={id} comments={comments} />
+      <CommentView
+        username={user.username}
+        photoId={id}
+        comments={comments}
+        createdAt={createdAt}
+      />
     </Flex>
   );
 };

@@ -22,9 +22,10 @@ interface Props {
   photoId: string;
   comments: Comment[];
   username: string;
+  createdAt: string;
 }
 
-const CommentView = ({ photoId, username, comments }: Props) => {
+const CommentView = ({ photoId, createdAt, username, comments }: Props) => {
   const [message, setMessage] = useState('');
   const [commentList, setCommentList] = useState(comments);
   const [isLoading, setIsLoading] = useState(false);
@@ -72,18 +73,33 @@ const CommentView = ({ photoId, username, comments }: Props) => {
         spacing={4}
       >
         {commentList.map((comment) => (
-          <Box key={`${comment.id}`} w="full" display="flex">
-            <Text fontSize={14} fontWeight="semibold">
-              @{comment.user.username}:&nbsp;
-            </Text>
-            <Text fontSize={14} fontWeight="normal">
-              {comment.message}
+          <Box
+            key={`${comment.id}`}
+            w="full"
+            display="flex"
+            flexDirection="column"
+          >
+            <Box display="flex">
+              <Text fontSize={14} fontWeight="semibold">
+                @{comment.user.username}:&nbsp;
+              </Text>
+              <Text fontSize={14} fontWeight="normal">
+                {comment.message}
+              </Text>
+            </Box>
+            <Text fontSize={8} fontWeight="light">
+              {new Date(comment.createdAt).toLocaleString('en-GB')}
             </Text>
           </Box>
         ))}
       </VStack>
       <Box display="flex" gap={2} flexDirection="column" alignSelf="end">
-        <Text fontSize={14}>Posted By: @{username}</Text>
+        <Box display="flex" flexDirection="column">
+          <Text fontSize={14}>Posted By: @{username}</Text>
+          <Text fontSize={10} fontWeight="light">
+            {new Date(createdAt).toLocaleString('en-GB')}
+          </Text>
+        </Box>
         <InputGroup size="md">
           <Input
             onChange={onChange}

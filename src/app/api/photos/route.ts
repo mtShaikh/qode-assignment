@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
   const userCookie = cookieStore.get('user');
 
   if (!userCookie) {
-    return NextResponse.json({}, { status: 400, statusText: 'Invalid user' });
+    return NextResponse.json({}, { status: 401, statusText: 'Invalid user' });
   }
 
   const result = await prisma.photo.create({
@@ -46,7 +46,7 @@ export async function GET(): Promise<NextResponse<Photo[]>> {
   const userCookie = cookieStore.get('user');
 
   if (!userCookie) {
-    return NextResponse.json([], { status: 400, statusText: 'Invalid user' });
+    return NextResponse.json([], { status: 401, statusText: 'Invalid user' });
   }
 
   const result = await prisma.photo.findMany({

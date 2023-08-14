@@ -87,7 +87,7 @@ const Home = () => {
           <UploadFile />
         </Box>
       </Flex>
-      <NameInputModal isOpen={isOpen} onClose={onClose} />
+      <NameInputModal isOpen={isOpen} onClose={onClose} hideLogout />
     </>
   );
 };

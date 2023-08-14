@@ -21,6 +21,7 @@ import { useAppContext } from '../context';
 
 interface Props {
   isOpen: boolean;
+  hideLogout?: boolean;
   onClose: () => void;
   closeOnOverlayClick?: boolean;
 }
@@ -28,6 +29,7 @@ interface Props {
 const NameInputModal = ({
   onClose,
   isOpen,
+  hideLogout = false,
   closeOnOverlayClick = false,
 }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -99,9 +101,11 @@ const NameInputModal = ({
         </ModalBody>
 
         <ModalFooter>
-          <Button mr={3} onClick={onLogout}>
-            Logout
-          </Button>
+          {!hideLogout && (
+            <Button mr={3} onClick={onLogout}>
+              Logout
+            </Button>
+          )}
           <Button
             spinner={<Spinner />}
             isLoading={isLoading}

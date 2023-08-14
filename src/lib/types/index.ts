@@ -1,8 +1,8 @@
 export interface Photo {
   url: string;
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   comments: Comment[];
   user: User;
 }
@@ -10,8 +10,8 @@ export interface Photo {
 export interface Comment {
   message: string;
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   user: User;
   photo: Photo;
 }

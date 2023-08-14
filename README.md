@@ -22,9 +22,15 @@ You can
 
 Open http://localhost:3000 with your browser to see the result.
 
+## Architecture
+
+The application uses a PostgreSQL database to store all the user and photo info with the actual photos being stored on cloudinary. The server is built using Next API routes which directly communicate with the DB. On the frontend, ChakraUI and React is used to build the components.
+
+Visit: https://qode-assignment-opal.vercel.app/ for the demo
+
 ### Caveats
 
-- session creation and maintainance is rudimentary.
+- session creation and maintainance logic is rudimentary.
   > Users are identified by usernames which are created by the user but on a conflict, the system appends the username with a unique token and creates a new user
 - username added by the user can be non-unique as there is no check added for uniqueness.
 - the user can refresh their session by deleting their browser data (cookies)
