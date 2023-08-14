@@ -1,23 +1,31 @@
 import { Box, Flex, Image } from '@chakra-ui/react';
 import CommentView from './CommentView';
+import { Photo } from '../types';
 
-const PhotoViewer = () => (
-  <Flex
-    direction={{ base: 'column', md: 'row' }}
-    alignItems="start"
-    gap={3}
-    borderWidth="1px"
-    borderRadius="lg"
-    p="16px"
-    borderColor="gray.200"
-    // mb={8}
-    w="full"
-  >
-    <Box w="100%">
-      <Image w="full" src="https://bit.ly/dan-abramov" alt="Dan Abramov" />
-    </Box>
-    <CommentView />
-  </Flex>
-);
+const PhotoViewer = ({ url, comments, id }: Photo) => {
+  return (
+    <Flex
+      direction={{ base: 'column', md: 'row' }}
+      alignItems="start"
+      gap={3}
+      borderWidth="1px"
+      borderRadius="lg"
+      p="16px"
+      borderColor="gray.200"
+      w="full"
+    >
+      <Box
+        w="100%"
+        display="flex"
+        alignItems="center"
+        justifyItems="center"
+        marginY="auto"
+      >
+        <Image w="full" src={url} alt={`${id}-photo`} />
+      </Box>
+      <CommentView photoId={id} comments={comments} />
+    </Flex>
+  );
+};
 
 export default PhotoViewer;

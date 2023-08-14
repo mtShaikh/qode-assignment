@@ -5,12 +5,12 @@ import { Box, Flex, Link, Text, useDisclosure } from '@chakra-ui/react';
 import ThemeToggle from './ThemeToggle';
 import NameInputModal from '../components/NameInputModal';
 import { useEffect, useState } from 'react';
-import { useUserContext } from '../context';
+import { useAppContext } from '../context';
 
 const Header = () => {
   const [username, setUsername] = useState<string>();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { username: storeUsername } = useUserContext();
+  const { username: storeUsername } = useAppContext();
 
   /* update username in header on context update */
   useEffect(() => {

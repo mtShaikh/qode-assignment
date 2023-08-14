@@ -1,9 +1,13 @@
-import { Button, Input, Spinner } from '@chakra-ui/react';
+import { Button, Input, Spinner, useToast } from '@chakra-ui/react';
 import { ChangeEvent, useRef, useState } from 'react';
 import axios, { AxiosError } from 'axios';
+import { useAppContext } from '../context';
 
 const UploadFile = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const { setRefreshPhoto } = useAppContext();
+
+  const toast = useToast();
 
   const hiddenFileInput = useRef<HTMLInputElement>(null);
 
@@ -24,12 +28,29 @@ const UploadFile = () => {
         `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD}/image/upload`,
         formData
       );
-      console.log(response);
       // upload response.secure_url to server
+
+      await axios.post('/api/photos', {
+        url: response.data.secure_url,
+      });
+
+      toast({
+        position: 'top-right',
+        title: 'Photo uploaded successfully',
+        status: 'success',
+      });
+
+      setRefreshPhoto?.(true);
 
       //@ts-ignore
     } catch (error: AxiosError) {
       console.error(error.message);
+
+      toast({
+        position: 'top-right',
+        title: 'Something went wrong',
+        status: 'error',
+      });
     } finally {
       setIsLoading(false);
     }

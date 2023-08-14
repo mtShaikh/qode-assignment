@@ -3,19 +3,26 @@ import { PropsWithChildren, createContext, useContext, useState } from 'react';
 interface ContextInterface {
   username?: string;
   setUsername?: React.Dispatch<React.SetStateAction<string>>;
+  refreshPhoto?: boolean;
+  setRefreshPhoto?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const UserContext = createContext({} as ContextInterface);
+export const AppContext = createContext({} as ContextInterface);
 
-export const UserProvider = ({ children }: PropsWithChildren) => {
+export const AppProvider = ({ children }: PropsWithChildren) => {
   const [username, setUsername] = useState<string>('');
+
+  /* using state var to keep track of new photos added */
+  const [refreshPhoto, setRefreshPhoto] = useState<boolean>(false);
   return (
-    <UserContext.Provider value={{ username, setUsername }}>
+    <AppContext.Provider
+      value={{ username, setUsername, refreshPhoto, setRefreshPhoto }}
+    >
       {children}
-    </UserContext.Provider>
+    </AppContext.Provider>
   );
 };
 
-export const useUserContext = (): ContextInterface => {
-  return useContext(UserContext);
+export const useAppContext = (): ContextInterface => {
+  return useContext(AppContext);
 };

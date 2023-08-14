@@ -1,3 +1,4 @@
+import { Photo } from '@prisma/client';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { type NextRequest } from 'next/server';
@@ -39,15 +40,22 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(result);
 }
 
-export async function GET() {
+export async function GET(): Promise<NextResponse<Photo[]>> {
   const cookieStore = cookies();
   const userCookie = cookieStore.get('user');
 
   if (!userCookie) {
-    return NextResponse.json({}, { status: 400, statusText: 'Invalid user' });
+    return NextResponse.json([], { status: 400, statusText: 'Invalid user' });
   }
 
-  const result = await prisma.photo.findMany();
+  const result = await prisma.photo.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+    include: {
+      comments: { include: { user: true } },
+    },
+  });
 
   return NextResponse.json(result);
 }

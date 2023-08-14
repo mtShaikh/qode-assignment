@@ -1,17 +1,45 @@
 'use client';
 
-import { Box, Flex, useDisclosure } from '@chakra-ui/react';
-import axios from 'axios';
+import {
+  Box,
+  Flex,
+  useDisclosure,
+  useToast,
+  Text,
+  Button,
+} from '@chakra-ui/react';
+import axios, { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import NameInputModal from '~/lib/components/NameInputModal';
 import PhotoViewer from '~/lib/components/PhotoViewer';
 import UploadFile from '~/lib/components/UploadFile';
-import { useUserContext } from '~/lib/context';
+import { useAppContext } from '~/lib/context';
+import { Photo } from '~/lib/types';
 
 const Home = () => {
+  const [photos, setPhotos] = useState<Photo[]>([]);
+  const { setUsername, refreshPhoto } = useAppContext();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { setUsername } = useUserContext();
+  const toast = useToast();
+
+  const fetchPhotos = async () => {
+    try {
+      const resp = await axios.get('/api/photos');
+      setPhotos(resp.data);
+
+      // @ts-ignore
+    } catch (err: AxiosError) {
+      toast({
+        position: 'top-right',
+        title: 'Something went wrong',
+        status: 'error',
+      });
+
+      console.error(err.message);
+    }
+  };
 
   const fetchUsername = async () => {
     try {
@@ -21,6 +49,12 @@ const Home = () => {
 
       // @ts-ignore
     } catch (err: AxiosError) {
+      toast({
+        position: 'top-right',
+        title: 'Something went wrong',
+        status: 'error',
+      });
+
       console.error(err.message);
     }
   };
@@ -32,6 +66,7 @@ const Home = () => {
     const userCookie = Cookies.get('user');
     if (userCookie) {
       fetchUsername();
+      fetchPhotos();
     } else {
       onOpen();
     }
@@ -40,6 +75,7 @@ const Home = () => {
   return (
     <>
       <Flex
+        pos="relative"
         direction="column"
         alignItems="center"
         justifyContent="center"
@@ -47,7 +83,18 @@ const Home = () => {
         gap={4}
         w="full"
       >
-        <PhotoViewer />
+        {refreshPhoto && (
+          <Box pos="absolute" top="1rem">
+            <Button colorScheme="blue" onClick={fetchPhotos}>
+              {' '}
+              Refresh your feed!
+            </Button>
+          </Box>
+        )}
+        {photos.map((photo, i) => (
+          <PhotoViewer {...photo} key={`${photo.id}-${i}`} />
+        ))}
+
         <Box pos="sticky" bottom="5">
           <UploadFile />
         </Box>
