@@ -57,8 +57,7 @@
     "typescript": "^5.1.6"
   },
   "engines": {
-    "node": ">=16.x.x",
+    "node": ">=18.x.x",
     "pnpm": ">=8"
-  },
-  "packageManager": "pnpm@8.1.0"
+  }
 }
