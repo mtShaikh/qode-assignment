@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import prisma from '~/lib/prisma';
 
 /* POST /api/comments
 request: {
